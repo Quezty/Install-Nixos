@@ -20,7 +20,8 @@ main() {
         echo -e '- nix.settings.experimental-features = [ "nix-command" "flakes" ]; \n \n'
     fi
 
-    is_git_installed=$(dpkg -l  | grep git)
+    # is_git_installed=$(dpkg -l  | grep git)
+    is_git_installed=$(git -v)
 
     if [[ -z "$is_git_installed" ]]; then
         echo "git is not installed, install git and try again"
