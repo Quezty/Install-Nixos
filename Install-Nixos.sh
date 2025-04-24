@@ -13,6 +13,7 @@ main() {
 
     line=$(nix config show | grep "experimental-features")
 
+    # Quietly runs grep on the output of variable "line" to see if flakes and nix-command is enabled 
     if echo "$line"	| grep -qw flakes && echo "$line" | grep -qw nix-command; then
 	    echo "Experimental features enabled"
     else 
@@ -20,7 +21,6 @@ main() {
         echo -e '- nix.settings.experimental-features = [ "nix-command" "flakes" ]; \n \n'
     fi
 
-    # is_git_installed=$(dpkg -l  | grep git)
     is_git_installed=$(git -v)
 
     if [[ -z "$is_git_installed" ]]; then
