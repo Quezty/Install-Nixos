@@ -12,13 +12,21 @@ main() {
 
     is_git_installed=$(dpkg -l  | grep git)
 
+    if [ -d "$HOME/nixos" ]; then
+        echo "Directory exists"
+    else
+        echo "Creating directory to move configuration into"
+        mkdir ~/nixos
+        echo "nixos folder created in home directory of $USER"
+    fi
+
     if [[ -z "$is_git_installed" ]]; then
         echo "git is not installed, install git and try again"
     else 
         echo "git is installed, pulling from repository"
     fi
 
-    git clone https://github.com/Quezty/NixosConfiguration.git tmp-files
+   git clone https://github.com/Quezty/NixosConfiguration.git tmp-files/NixosConfiguration
 }
 
 main "$@"
