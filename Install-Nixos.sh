@@ -11,25 +11,28 @@ main() {
     echo -e "\n \n \n"
 
 
-    line=$(nix config show | grep "experimental-features")
+    line=$(nix config show 2>/dev/null | grep "experimental-features" ) || {
+        echo 'Command "nix config show" failed, make sure you are running this on a system where nix is installed and the nix command is available!'
+        exit 0
+    }
 
     if echo "$line"	| grep -qw flakes && echo "$line" | grep -qw nix-command; then
 	    echo "Experimental features enabled"
     else 
 	    echo "Experimental features needed for the script to work was not enabled add the following lines to your configuration for the script to work"
         echo -e '- nix.settings.experimental-features = [ "nix-command" "flakes" ]; \n \n'
+        exit 0
     fi
 
     is_git_installed=$(dpkg -l  | grep git)
 
     if [[ -z "$is_git_installed" ]]; then
         echo "git is not installed, install git and try again"
+        exit 0
     else 
-        echo "git is installed, pulling from repository"
+        echo "git is installed, downloading used repositories"
+        # downloadRepositories
     fi
-
-    git clone https://github.com/Quezty/NixosConfiguration.git tmp-files/NixosConfiguration
-
 
     if [ -d "$HOME/nixos" ]; then
         echo "Directory exists"
@@ -40,4 +43,9 @@ main() {
     fi
 }
 
+# Function to "cleanly" list all repositories that needs to be installed for the system to be complete, will probably remove this once I have landed on a better repository structure
+downloadRepositories() {
+    git clone https://github.com/Quezty/NixosConfiguration.git tmp-files/NixosConfiguration
+    git clone https://github.com/Quezty/Justfile.git tmp-files/Justfile
+}
 main "$@"
