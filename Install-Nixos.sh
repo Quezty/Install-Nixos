@@ -16,6 +16,7 @@ main() {
         exit 0
     }
 
+    # Quietly runs grep on the output of variable "line" to see if flakes and nix-command is enabled 
     if echo "$line"	| grep -qw flakes && echo "$line" | grep -qw nix-command; then
 	    echo "Experimental features enabled"
     else 
@@ -24,7 +25,7 @@ main() {
         exit 0
     fi
 
-    is_git_installed=$(dpkg -l  | grep git)
+    is_git_installed=$(git -v)
 
     if [[ -z "$is_git_installed" ]]; then
         echo "git is not installed, install git and try again"
