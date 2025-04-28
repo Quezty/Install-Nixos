@@ -11,6 +11,7 @@ main() {
     echo -e "\n \n \n"
 
 
+    # Runs grep on current configuration to later be used in if-statement that checks if necessary configuration is set up, sends error to stderr and displays echo message to fix issue. Then exits script
     line=$(nix config show 2>/dev/null | grep "experimental-features" ) || {
         echo 'Command "nix config show" failed, make sure you are running this on a system where nix is installed and the nix command is available!'
         exit 0
@@ -25,8 +26,10 @@ main() {
         exit 0
     fi
 
+    # Attempts to run git -v to see if git is installed, probably cleaner way to do this
     is_git_installed=$(git -v)
 
+    # Runs if statement on output of variable above. Needs improvement
     if [[ -z "$is_git_installed" ]]; then
         echo "git is not installed, install git and try again"
         exit 0
@@ -35,6 +38,7 @@ main() {
         # downloadRepositories
     fi
 
+    # Creates directory where all the files will be stored for nixos configuration and dotfiles
     if [ -d "$HOME/nixos" ]; then
         echo "Directory exists"
     else
